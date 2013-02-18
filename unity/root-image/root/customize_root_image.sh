@@ -24,4 +24,4 @@ sed -i "s/#Server/Server/g" /etc/pacman.d/mirrorlist
 #systemctl disable getty@tty1.service
 #systemctl enable multi-user.target pacman-init.service autologin@.service dhcpcd.service
 
-systemctl enable graphical.target pacman-init.service dhcpcd.service
+systemctl enable graphical.target pacman-init.service NetworkManager.service
