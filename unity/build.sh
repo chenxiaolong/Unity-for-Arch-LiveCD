@@ -195,7 +195,7 @@ make_prepare() {
 # Build ISO
 make_iso() {
     mkarchiso ${verbose} -w "${work_dir}" -D "${install_dir}" checksum
-    mkarchiso ${verbose} -w "${work_dir}" -D "${install_dir}" -L "${iso_label}" -o "${out_dir}" iso "${iso_name}-${iso_version}-dual.iso"
+    mkarchiso ${verbose} -w "${work_dir}" -D "${install_dir}" -L "${iso_label}" -o "${out_dir}" iso "${iso_name}-${iso_version}-${arch}.iso"
 }
 
 if [[ ${EUID} -ne 0 ]]; then
@@ -230,16 +230,16 @@ mkdir -p ${work_dir}
 run_once make_pacman_conf
 
 # Do all stuff for each root-image
-for arch in i686 x86_64; do
+#for arch in i686 x86_64; do
     run_once make_basefs
     run_once make_packages
     run_once make_setup_mkinitcpio
     run_once make_customize_root_image
-done
+#done
 
-for arch in i686 x86_64; do
+#for arch in i686 x86_64; do
     run_once make_boot
-done
+#done
 
 # Do all stuff for "iso"
 run_once make_boot_extra
@@ -250,8 +250,8 @@ run_once make_efiboot
 
 run_once make_aitab
 
-for arch in i686 x86_64; do
+#for arch in i686 x86_64; do
     run_once make_prepare
-done
+#done
 
 run_once make_iso
