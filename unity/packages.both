@@ -124,7 +124,7 @@ xorg-server-ubuntu
 
 # Unity-for-Arch-Extra
 accountsservice-ubuntu
-chromium-extension-webaccounts
+#chromium-extension-webaccounts
 empathy-ubuntu
 firefox-extension-unity
 firefox-extension-webaccounts
@@ -134,14 +134,14 @@ humanity-icon-theme
 indicator-cpufreq
 indicator-sync
 libpam-freerdp
-libreoffice-extension-menubar
-liferea-indicator
+#libreoffice-extension-menubar
+#liferea-indicator
 lightdm-remote-session-freerdp
 lightdm-remote-session-uccsconfigure
 lightdm-ubuntu
 lightdm-unity-greeter
-pidgin-libnotify-ubuntu
-plasma-widget-menubar
+#pidgin-libnotify-ubuntu
+#plasma-widget-menubar
 python-polib
 python3-pycurl
 remote-login-service
@@ -187,7 +187,7 @@ unity-webapps-yandexnews
 unity-webapps-youtube
 webaccounts-browser-extension
 webapps-applications
-xfce4-indicator-plugin
+#xfce4-indicator-plugin
 
 xorg-drivers
 
