@@ -126,3 +126,18 @@ xorg-server-ubuntu
 gdm
 
 xorg-drivers
+
+# Required GNOME packages
+#gnome-backgrounds
+gnome-desktop
+gnome-icon-theme
+gnome-icon-theme-extras
+gnome-icon-theme-symbolic
+gnome-screensaver
+gnome-terminal
+gnome-themes-standard
+#xdg-user-dirs-gtk
+
+# Fonts
+ttf-dejavu
+ttf-ubuntu-font-family
