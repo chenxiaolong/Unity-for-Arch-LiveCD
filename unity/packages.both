@@ -138,6 +138,21 @@ gnome-terminal
 gnome-themes-standard
 #xdg-user-dirs-gtk
 
+# Other GNOME packages
+empathy
+eog
+gcalctool
+gedit
+gnome-screenshot
+gnome-tweak-tool
+
 # Fonts
 ttf-dejavu
 ttf-ubuntu-font-family
+
+# Desktop applications
+firefox
+thunderbird
+
+# Other stuff
+dconf-editor
