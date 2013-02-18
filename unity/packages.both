@@ -127,6 +127,10 @@ gdm
 
 xorg-drivers
 
+# VirtualBox drivers
+virtualbox-guest-modules
+virtualbox-guest-utils
+
 # Required GNOME packages
 #gnome-backgrounds
 gnome-desktop
