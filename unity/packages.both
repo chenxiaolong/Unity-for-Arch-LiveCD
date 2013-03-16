@@ -2,59 +2,59 @@ arch-install-scripts
 b43-fwcutter
 btrfs-progs
 crda
-darkhttpd
-ddrescue
+#darkhttpd
+#ddrescue
 dhclient
 dialog
-dmraid
+#dmraid
 dnsmasq
 dnsutils
 dosfstools
 elinks
 ethtool
-fsarchiver
-gnu-netcat
-gptfdisk
+#fsarchiver
+#gnu-netcat
+#gptfdisk
 grml-zsh-config
-grub-bios
-haveged
+#grub-bios
+#haveged
 hdparm
 ipw2100-fw
 ipw2200-fw
-irssi
-lftp
-lilo
-linux-atm
-mc
+#irssi
+#lftp
+#lilo
+#linux-atm
+#mc
 mtools
 nfs-utils
-nilfs-utils
-nmap
+#nilfs-utils
+#nmap
 ntfs-3g
 ntfsprogs
 ntp
-openconnect
+#openconnect
 openssh
-openvpn
-partclone
+#openvpn
+#partclone
 parted
-partimage
-pptpclient
+#partimage
+#pptpclient
 rfkill
-rp-pppoe
+#rp-pppoe
 rsync
 smartmontools
-speedtouch
+#speedtouch
 sudo
 tcpdump
-testdisk
+#testdisk
 usb_modeswitch
-vpnc
+#vpnc
 wget
 wireless_tools
-wpa_actiond
-wvdial
-xl2tpd
+#wpa_actiond
+#wvdial
+#xl2tpd
 zd1211-firmware
 zsh
 
@@ -95,7 +95,7 @@ libdbusmenu-gtk3
 libindicate
 libindicate-gtk2
 libindicate-gtk3
-libindicate-qt
+#libindicate-qt
 libindicator
 libindicator3
 liboverlay-scrollbar
@@ -110,7 +110,7 @@ network-manager-applet-ubuntu
 nux
 overlay-scrollbar
 python-oauthlib
-sni-qt
+#sni-qt
 unity
 unity-asset-pool
 unity-lens-applications
@@ -119,7 +119,7 @@ unity-lens-music
 unity-lens-photos
 unity-lens-video
 unity-scope-video-remote
-xorg-server-devel-ubuntu
+#xorg-server-devel-ubuntu
 xorg-server-ubuntu
 
 # Unity-for-Arch-Extra
@@ -131,8 +131,8 @@ firefox-extension-webaccounts
 firefox-extension-websites-integration
 firefox-globalmenu
 humanity-icon-theme
-indicator-cpufreq
-indicator-sync
+#indicator-cpufreq
+#indicator-sync
 libpam-freerdp
 #libreoffice-extension-menubar
 #liferea-indicator
@@ -147,8 +147,8 @@ python3-pycurl
 remote-login-service
 telepathy-indicator
 thin-client-config-agent
-thunderbird-globalmenu
-thunderbird-messagingmenu
+#thunderbird-globalmenu
+#thunderbird-messagingmenu
 ubuntu-sounds
 ubuntu-themes
 ubuntu-wallpapers
@@ -215,7 +215,6 @@ gnome-themes-standard
 #xdg-user-dirs-gtk
 
 # Other GNOME packages
-empathy
 eog
 gcalctool
 gedit
@@ -229,7 +228,8 @@ ttf-ubuntu-font-family
 
 # Desktop applications
 firefox
-thunderbird
+#thunderbird
 
 # Other stuff
 networkmanager
+pulseaudio
