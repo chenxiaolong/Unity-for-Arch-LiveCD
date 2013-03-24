@@ -106,7 +106,8 @@ make_syslinux() {
     mkdir -p ${work_dir}/iso/${install_dir}/boot/syslinux
     for _cfg in ${script_path}/syslinux/*.cfg; do
         sed "s|%ARCHISO_LABEL%|${iso_label}|g;
-             s|%INSTALL_DIR%|${install_dir}|g" ${_cfg} > ${work_dir}/iso/${install_dir}/boot/syslinux/${_cfg##*/}
+             s|%INSTALL_DIR%|${install_dir}|g;
+             s|%ARCH%|${arch}|g" ${_cfg} > ${work_dir}/iso/${install_dir}/boot/syslinux/${_cfg##*/}
     done
     cp ${script_path}/syslinux/splash.png ${work_dir}/iso/${install_dir}/boot/syslinux
     cp ${work_dir}/${arch}/root-image/usr/lib/syslinux/*.c32 ${work_dir}/iso/${install_dir}/boot/syslinux
@@ -180,7 +181,7 @@ make_efiboot() {
 # Copy aitab
 make_aitab() {
     mkdir -p ${work_dir}/iso/${install_dir}
-    cp ${script_path}/aitab ${work_dir}/iso/${install_dir}/aitab
+    sed "s|%ARCH%|${arch}|g" ${script_path}/aitab > ${work_dir}/iso/${install_dir}/aitab
 }
 
 # Build all filesystem images specified in aitab (.fs.sfs .sfs)
@@ -200,11 +201,6 @@ make_iso() {
 
 if [[ ${EUID} -ne 0 ]]; then
     echo "This script must be run as root."
-    _usage 1
-fi
-
-if [[ ${arch} != x86_64 ]]; then
-    echo "This script needs to be run on x86_64"
     _usage 1
 fi
 
@@ -229,17 +225,12 @@ mkdir -p ${work_dir}
 
 run_once make_pacman_conf
 
-# Do all stuff for each root-image
-#for arch in i686 x86_64; do
-    run_once make_basefs
-    run_once make_packages
-    run_once make_setup_mkinitcpio
-    run_once make_customize_root_image
-#done
+run_once make_basefs
+run_once make_packages
+run_once make_setup_mkinitcpio
+run_once make_customize_root_image
 
-#for arch in i686 x86_64; do
-    run_once make_boot
-#done
+run_once make_boot
 
 # Do all stuff for "iso"
 run_once make_boot_extra
@@ -250,8 +241,6 @@ run_once make_efiboot
 
 run_once make_aitab
 
-#for arch in i686 x86_64; do
-    run_once make_prepare
-#done
+run_once make_prepare
 
 run_once make_iso
