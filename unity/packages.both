@@ -186,7 +186,8 @@ webaccounts-browser-extension
 webapps-applications
 #xfce4-indicator-plugin
 
-# Xorg drivers
+# Xorg & drivers
+xorg-server
 xf86-input-evdev
 xf86-input-synaptics
 xf86-input-vmmouse
