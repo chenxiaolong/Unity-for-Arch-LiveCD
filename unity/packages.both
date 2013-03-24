@@ -64,11 +64,11 @@ bamfdaemon
 compiz-ubuntu
 credentials-preferences-ubuntu
 evemu
-fixesproto-ubuntu
 frame
 geis
 gnome-control-center-ubuntu
 gnome-control-center-unity
+gnome-screensaver-ubuntu
 gnome-session-ubuntu
 gnome-settings-daemon-ubuntu
 grail
@@ -102,7 +102,6 @@ liboverlay-scrollbar3
 libunity
 libunity-misc
 libunity-webapps
-libxfixes-ubuntu
 metacity-ubuntu
 nautilus-ubuntu
 network-manager-applet-ubuntu
@@ -118,8 +117,6 @@ unity-lens-music
 unity-lens-photos
 unity-lens-video
 unity-scope-video-remote
-#xorg-server-devel-ubuntu
-xorg-server-ubuntu
 
 # Unity-for-Arch-Extra
 accountsservice-ubuntu
@@ -151,6 +148,7 @@ thin-client-config-agent
 ubuntu-sounds
 ubuntu-themes
 ubuntu-wallpapers
+unity-tweak-tool
 unity-webapps
 unity-webapps-amazoncloudreader
 unity-webapps-angrybirds
@@ -208,7 +206,6 @@ gnome-desktop
 gnome-icon-theme
 gnome-icon-theme-extras
 gnome-icon-theme-symbolic
-gnome-screensaver
 gnome-terminal
 gnome-themes-standard
 #xdg-user-dirs-gtk
