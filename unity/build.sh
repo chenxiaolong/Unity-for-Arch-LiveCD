@@ -50,7 +50,10 @@ run_once() {
 # Setup custom pacman.conf with current cache directories.
 make_pacman_conf() {
     local _cache_dirs
-    _cache_dirs=($(pacman -v 2>&1 | grep '^Cache Dirs:' | sed 's/Cache Dirs:\s*//g'))
+    #_cache_dirs=($(pacman -v 2>&1 | grep '^Cache Dirs:' | sed 's/Cache Dirs:\s*//g'))
+    # Use a local cache, so this pacman doesn't try to write to the system cache
+    # on the jenkins build server
+    _cache_dirs=("$(pwd)/cache")
     sed -r "s|^#?\\s*CacheDir.+|CacheDir = $(echo -n ${_cache_dirs[@]})|g" ${script_path}/pacman.conf > ${pacman_conf}
 }
 
