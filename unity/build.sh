@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# NOTE TO SELF: Must update sha512sums in build server after modifying this
+# script!
+
 set -e -u
 
 iso_name=archlinux
