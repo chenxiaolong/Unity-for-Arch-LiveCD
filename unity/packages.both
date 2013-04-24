@@ -62,7 +62,6 @@ appmenu-gtk2
 appmenu-gtk3
 bamfdaemon
 compiz-ubuntu
-credentials-preferences-ubuntu
 evemu
 frame
 geis
@@ -72,6 +71,7 @@ gnome-screensaver-ubuntu
 gnome-session-ubuntu
 gnome-settings-daemon-ubuntu
 grail
+gsettings-desktop-schemas-ubuntu
 gtk2-ubuntu
 gtk3-ubuntu
 ido
@@ -119,7 +119,10 @@ unity-lens-video
 unity-scope-video-remote
 
 # Unity-for-Arch-Extra
-accountsservice-ubuntu
+################################################################################
+accountsservice
+################################################################################
+#accountsservice-ubuntu
 #chromium-extension-webaccounts
 empathy-ubuntu
 firefox-extension-unity
@@ -213,8 +216,8 @@ gnome-themes-standard
 
 # Other GNOME packages
 eog
-gcalctool
 gedit
+gnome-calculator
 gnome-power-manager
 gnome-screenshot
 gnome-tweak-tool
