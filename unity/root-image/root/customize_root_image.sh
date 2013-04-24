@@ -17,6 +17,18 @@ chmod 440 /etc/sudoers.d/g_wheel
 
 sed -i "s/#Server/Server/g" /etc/pacman.d/mirrorlist
 
+# Enable Unity-for-Arch repositories by default
+cat >> /etc/pacman.conf << EOF
+
+[Unity-for-Arch]
+SigLevel = Optional TrustAll
+Server = http://dl.dropbox.com/u/486665/Repos/Unity-for-Arch/\$arch
+
+[Unity-for-Arch-Extra]
+SigLevel = Optional TrustAll
+Server = http://dl.dropbox.com/u/486665/Repos/Unity-for-Arch-Extra/\$arch
+EOF
+
 # Compile GSettings schemas so that
 # 10_selected_ubuntu_defaults.gschema.override is recognized
 glib-compile-schemas /usr/share/glib-2.0/schemas/
