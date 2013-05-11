@@ -214,6 +214,7 @@ gnome-themes-standard
 # Other GNOME packages
 eog
 gedit
+gnome-bluetooth
 gnome-calculator
 gnome-keyring
 gnome-power-manager
