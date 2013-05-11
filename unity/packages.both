@@ -119,10 +119,7 @@ unity-lens-photos
 unity-lens-video
 
 # Unity-for-Arch-Extra
-################################################################################
-accountsservice
-################################################################################
-#accountsservice-ubuntu
+accountsservice-ubuntu
 #chromium-extension-webaccounts
 empathy-ubuntu
 firefox-extension-unity
