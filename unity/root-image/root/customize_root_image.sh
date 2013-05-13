@@ -14,6 +14,7 @@ useradd -m -p "" -g users -G "adm,audio,floppy,log,network,rfkill,scanner,storag
 
 chmod 750 /etc/sudoers.d
 chmod 440 /etc/sudoers.d/g_wheel
+chown -R 0:0 /etc/sudoers.d
 
 sed -i "s/#Server/Server/g" /etc/pacman.d/mirrorlist
 
