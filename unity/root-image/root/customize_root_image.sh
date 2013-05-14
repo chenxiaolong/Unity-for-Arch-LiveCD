@@ -28,6 +28,10 @@ Server = http://dl.dropbox.com/u/486665/Repos/Unity-for-Arch/\$arch
 [Unity-for-Arch-Extra]
 SigLevel = Optional TrustAll
 Server = http://dl.dropbox.com/u/486665/Repos/Unity-for-Arch-Extra/\$arch
+
+[Unity-for-Arch-LiveCD]
+SigLevel = Optional TrustAll
+Server = http://dl.dropbox.com/u/486665/Repos/Unity-for-Arch-LiveCD/\$arch
 EOF
 
 #sed 's#\(^ExecStart=-/sbin/agetty\)#\1 --autologin root#;
