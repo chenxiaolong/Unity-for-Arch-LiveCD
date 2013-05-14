@@ -30,10 +30,6 @@ SigLevel = Optional TrustAll
 Server = http://dl.dropbox.com/u/486665/Repos/Unity-for-Arch-Extra/\$arch
 EOF
 
-# Compile GSettings schemas so that
-# 10_selected_ubuntu_defaults.gschema.override is recognized
-glib-compile-schemas /usr/share/glib-2.0/schemas/
-
 #sed 's#\(^ExecStart=-/sbin/agetty\)#\1 --autologin root#;
 #     s#\(^Alias=getty.target.wants/\).\+#\1autologin@tty1.service#' \
 #     /usr/lib/systemd/system/getty@.service > /etc/systemd/system/autologin@.service

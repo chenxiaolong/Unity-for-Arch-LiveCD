@@ -239,3 +239,6 @@ firefox
 networkmanager
 pulseaudio
 gparted
+
+# Default settings
+ubuntu-default-settings
