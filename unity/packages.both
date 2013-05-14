@@ -228,6 +228,9 @@ gnome-tweak-tool
 ttf-dejavu
 ttf-ubuntu-font-family
 
+# Cursors
+xcursor-vanilla-dmz
+
 # Desktop applications
 firefox
 #thunderbird
