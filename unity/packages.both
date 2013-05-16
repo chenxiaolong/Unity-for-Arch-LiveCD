@@ -227,6 +227,7 @@ gnome-tweak-tool
 # Fonts
 ttf-dejavu
 ttf-ubuntu-font-family
+wqy-microhei
 
 # Cursors
 xcursor-vanilla-dmz
