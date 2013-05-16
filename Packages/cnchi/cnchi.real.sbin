@@ -1,0 +1,2 @@
+#!/bin/sh
+python3 /usr/share/cnchi/cnchi.py

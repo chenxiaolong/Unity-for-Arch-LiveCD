@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Unity-for-Arch Installer
+Comment=Cnchi Graphical Installer from Antergos
+Exec=/usr/bin/cnchi
+Terminal=false
+Icon=/usr/share/cnchi/data/icons/128x128/cnchi.png
