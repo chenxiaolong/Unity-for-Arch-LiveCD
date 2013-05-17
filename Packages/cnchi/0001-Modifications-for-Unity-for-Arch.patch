@@ -1,18 +1,40 @@
-From 06a98767048f47813dd4be17716425afbf4bf71d Mon Sep 17 00:00:00 2001
+From 245d6ed6e7cb397a705353fd70e9333806108004 Mon Sep 17 00:00:00 2001
 From: Xiao-Long Chen <chenxiaolong@cxl.epac.to>
-Date: Tue, 14 May 2013 21:01:57 -0400
+Date: Fri, 17 May 2013 14:43:27 -0400
 Subject: [PATCH] Modifications for Unity-for-Arch
 
 ---
- data/packages.xml          | 202 ++++++++++++++++++++++++++++++++++++++++-----
- scripts/postinstall.sh     | 184 ++++-------------------------------------
- scripts/set-settings       | 146 --------------------------------
- src/config.py              |   2 +-
- src/desktop.py             |  12 ++-
- src/installation_thread.py |  40 ++++-----
- 6 files changed, 225 insertions(+), 361 deletions(-)
+ cnchi.py                    |  10 ++-
+ data/packages.xml           | 202 +++++++++++++++++++++++++++++++++++++++-----
+ scripts/postinstall.sh      | 190 ++++-------------------------------------
+ scripts/set-settings        | 146 --------------------------------
+ src/config.py               |   2 +-
+ src/desktop.py              |  12 ++-
+ src/installation_process.py |  40 ++++-----
+ 7 files changed, 231 insertions(+), 371 deletions(-)
  delete mode 100755 scripts/set-settings
 
+diff --git a/cnchi.py b/cnchi.py
+index 48be1e8..ede2894 100755
+--- a/cnchi.py
++++ b/cnchi.py
+@@ -342,10 +342,12 @@ if __name__ == '__main__':
+             log._debug = True
+             log.debug("Debug mode on")
+         elif opt in ('-u', '--update'):
+-            upd = updater.Updater()
+-            if upd.update():
+-                print("Program updated! Restarting...")
+-                os.execl(sys.executable, *([sys.executable] + sys.argv))
++            print('This version is patched for the Unity-for-Arch LiveCD and cannot use upstream\n'
++                  'updates (unless you want a broken system). The LiveCD contains a repository\n'
++                  'with automatically compiled updates. Just run:\n\n'
++                  '  sudo pacman -Sy && sudo pacman -S cnchi\n\n'
++                  'to update to the latest installer.')
++            sys.exit(1)
+         elif opt in ('-p', '--packages'):
+             _alternate_package_list = arg
+         elif opt in ('-a', '--aria2'):
 diff --git a/data/packages.xml b/data/packages.xml
 index 7d14b06..2665116 100644
 --- a/data/packages.xml
@@ -301,10 +323,10 @@ index 7d14b06..2665116 100644
 \ No newline at end of file
 +</packages>
 diff --git a/scripts/postinstall.sh b/scripts/postinstall.sh
-index 61b143b..9532069 100644
+index 8f55054..394e6cd 100644
 --- a/scripts/postinstall.sh
 +++ b/scripts/postinstall.sh
-@@ -1,165 +1,11 @@
+@@ -1,171 +1,11 @@
 -set_synaptics()
 -{
 -    cat << EOF > ${DESTDIR}/etc/X11/xorg.conf.d/50-synaptics.conf 
@@ -364,7 +386,10 @@ index 61b143b..9532069 100644
 -	chroot ${DESTDIR} ln -s /usr/share/icons/Adwaita /usr/share/icons/default
 -
 -	# Set gsettings input-source
--	sed -i "s/'us'/'${LANG_CODE}'/" /usr/share/cnchi/scripts/set-settings
+-	if [[ "${KEYBOARD_VARIANT}" != '' ]];then
+-		sed -i "s/'us'/'${KEYBOARD_LAYOUT}+${KEYBOARD_VARIANT}'/" /usr/share/cnchi/scripts/set-settings
+-	else
+-		sed -i "s/'us'/'${KEYBOARD_LAYOUT}'/" /usr/share/cnchi/scripts/set-settings
 -
 -	# Set gsettings
 -	cp /usr/share/cnchi/scripts/set-settings ${DESTDIR}/usr/bin/set-settings
@@ -385,7 +410,10 @@ index 61b143b..9532069 100644
 -	chroot ${DESTDIR} ln -s /usr/share/icons/Adwaita /usr/share/icons/default
 -
 -	# Set gsettings input-source
--	sed -i "s/'us'/'${LANG_CODE}'/" /usr/share/cnchi/scripts/set-settings
+-	if [[ "${KEYBOARD_VARIANT}" != '' ]];then
+-		sed -i "s/'us'/'${KEYBOARD_LAYOUT}+${KEYBOARD_VARIANT}'/" /usr/share/cnchi/scripts/set-settings
+-	else
+-		sed -i "s/'us'/'${KEYBOARD_LAYOUT}'/" /usr/share/cnchi/scripts/set-settings
 -
 -	# copy antergos menu icon
 -	mkdir -p ${DESTDIR}/usr/share/antergos/
@@ -476,7 +504,7 @@ index 61b143b..9532069 100644
  }
  
  postinstall(){
-@@ -173,17 +19,19 @@ postinstall(){
+@@ -180,17 +20,19 @@ postinstall(){
  	"${DESKTOP}_settings"
  
  	## Unmute alsa channels
@@ -657,10 +685,10 @@ index 889a5d8..0000000
 -fi
 -
 diff --git a/src/config.py b/src/config.py
-index fb889eb..5f6f910 100644
+index fa9680c..d133bf5 100644
 --- a/src/config.py
 +++ b/src/config.py
-@@ -54,7 +54,7 @@ class Settings():
+@@ -56,7 +56,7 @@ class Settings():
              'timezone_longitude' : 0, \
              'timezone_done' : False, \
              'use_ntp' : True, \
@@ -670,7 +698,7 @@ index fb889eb..5f6f910 100644
              'partition_mode' : 'easy', \
              'auto_device' : '/dev/sda', \
 diff --git a/src/desktop.py b/src/desktop.py
-index 2395c31..65dd655 100644
+index 5dcfe3e..a6e4fe1 100644
 --- a/src/desktop.py
 +++ b/src/desktop.py
 @@ -56,7 +56,7 @@ class DesktopAsk(Gtk.Box):
@@ -682,7 +710,7 @@ index 2395c31..65dd655 100644
          self.desktop_mode = 'vanilla'
  
          self.set_desktop_list()
-@@ -123,6 +123,11 @@ class DesktopAsk(Gtk.Box):
+@@ -122,6 +122,11 @@ class DesktopAsk(Gtk.Box):
              "an intuitive interface.")
              txt = "<span weight='bold'>RAZOR-QT</span>\n" + txt
              
@@ -694,7 +722,7 @@ index 2395c31..65dd655 100644
          label.set_markup(txt)
  
          image.set_from_file(self.desktops_dir + desktop + ".png")
-@@ -152,8 +157,9 @@ class DesktopAsk(Gtk.Box):
+@@ -150,8 +155,9 @@ class DesktopAsk(Gtk.Box):
          # liststore_desktop.append(['Enlightment'])
          # liststore_desktop.append(['KDE'])
          liststore_desktop.append(['Razor-qt'])
@@ -704,21 +732,21 @@ index 2395c31..65dd655 100644
 +        self.select_default_row(self.treeview_desktop, 'Unity')
  
      def set_desktop(self, desktop):
- 
-@@ -173,6 +179,8 @@ class DesktopAsk(Gtk.Box):
+         if desktop == 'Gnome':
+@@ -170,6 +176,8 @@ class DesktopAsk(Gtk.Box):
              self.desktop_choice = 'kde'
          elif desktop == 'Razor-qt':
              self.desktop_choice = 'razor'
 +        elif desktop == 'Unity':
 +            self.desktop_choice = 'unity'
  
- 
          self.translate_ui(self.desktop_choice, self.desktop_mode)
-diff --git a/src/installation_thread.py b/src/installation_thread.py
-index 06eae61..6844b28 100644
---- a/src/installation_thread.py
-+++ b/src/installation_thread.py
-@@ -81,7 +81,7 @@ class InstallationThread(threading.Thread):
+                 
+diff --git a/src/installation_process.py b/src/installation_process.py
+index 1ed37d2..5ed559b 100644
+--- a/src/installation_process.py
++++ b/src/installation_process.py
+@@ -84,7 +84,7 @@ class InstallationProcess(Process):
  
          # Check desktop selected to load packages needed
          self.desktop = self.settings.get('desktop')
@@ -727,11 +755,11 @@ index 06eae61..6844b28 100644
          self.card = []
      
          self.fs_devices = fs_devices
-@@ -250,11 +250,14 @@ class InstallationThread(threading.Thread):
+@@ -280,11 +280,14 @@ class InstallationProcess(Process):
                  tmp_file.write("SigLevel = PackageRequired\n")
                  tmp_file.write("Include = /etc/pacman.d/mirrorlist\n")
  
--            tmp_file.write("#### Antergos repos start here\n")
+-            tmp_file.write("\n\n#### Antergos repos start here\n\n")
 -            tmp_file.write("[antergos]\n") 
 -            tmp_file.write("SigLevel = PackageRequired\n")
 -            tmp_file.write("Include = /etc/pacman.d/antergos-mirrorlist\n\n")
@@ -747,16 +775,16 @@ index 06eae61..6844b28 100644
          
          ## Init pyalpm
  
-@@ -300,7 +303,7 @@ class InstallationThread(threading.Thread):
-         self.queue_event('info', "Getting package list...")
+@@ -336,7 +339,7 @@ class InstallationProcess(Process):
+             self.queue_event('info', "Getting package list...")
  
-         try:
--            packages_xml = urlopen('http://install.antergos.com/packages.xml')
-+            packages_xml = urlopen('https://dl.dropboxusercontent.com/u/486665/packages.xml')
-         except URLError as e:
-             # If the installer can't retrieve the remote file, try to install with a local
-             # copy, that may not be updated
-@@ -599,16 +602,6 @@ class InstallationThread(threading.Thread):
+             try:
+-                packages_xml = urlopen('http://install.antergos.com/packages.xml')
++                packages_xml = urlopen('https://dl.dropboxusercontent.com/u/486665/packages.xml')
+             except URLError as e:
+                 # If the installer can't retrieve the remote file, try to install with a local
+                 # copy, that may not be updated
+@@ -634,16 +637,6 @@ class InstallationProcess(Process):
          if not os.path.exists(grub_d_dir):
              os.makedirs(grub_d_dir)
  
@@ -773,7 +801,7 @@ index 06eae61..6844b28 100644
          locale = self.settings.get("locale")
          self.chroot(['sh', '-c', 'LANG=%s /usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg' % locale])
          
-@@ -686,10 +679,10 @@ class InstallationThread(threading.Thread):
+@@ -721,10 +714,10 @@ class InstallationProcess(Process):
          self.queue_event("action", _("Configuring your new system"))
  
          # Copy important config files to target system
@@ -787,7 +815,7 @@ index 06eae61..6844b28 100644
  
          # enable services      
          self.enable_services([ self.desktop_manager, "NetworkManager" ])
-@@ -728,14 +721,15 @@ class InstallationThread(threading.Thread):
+@@ -763,14 +756,15 @@ class InstallationProcess(Process):
          
          
          self.chroot(['useradd', '-m', '-s', '/bin/bash', \

@@ -1,33 +1,37 @@
 # Maintainer: Xiao-Long Chen <chenxiaolong@cxl.epac.to>
 # Original Maintainer: Alex Filgueira <alexfilgueira@antergos.com>
 
-_commit=86a617394ac92629ecd067939f2b6a6bcf15cee8
+_commit=825a7a9b0250ad04afc68369314703657bd1bd80
 _tagver=0.2.1
 
 pkgname=cnchi
-pkgver=0.2.1.r341.86a6173
-pkgrel=2
+pkgver=0.2.1.r470.825a7a9
+pkgrel=1
 pkgdesc='Graphical Installer for Antergos Linux'
 arch=('any')
 license=('GPL')
 url="https://github.com/Antergos/Cnchi"
-depends=('python' 'pyalpm' 'python-gobject' 'python-dbus' 'hdparm' 'python-cairo' 'libtimezonemap' 'py3parted' 'hwinfo' 'webkitgtk3')
+depends=('pm2ml' 'python' 'pyalpm' 'python-gobject' 'python-dbus' 'hdparm' 'python-cairo' 'libtimezonemap' 'py3parted' 'hwinfo' 'webkitgtk3')
 makedepends=('git')
-source=("Cnchi::git+https://github.com/Antergos/Cnchi.git#${commit}"
+source=("Cnchi::git+https://github.com/Antergos/Cnchi.git"
         '0001-Modifications-for-Unity-for-Arch.patch'
         'cnchi.desktop'
         'cnchi.bin'
         'cnchi.real.sbin'
         'to.epac.cxl.pkexec.cnchi.policy')
 sha512sums=('SKIP'
-            'dff1da692eecb36d1cb61ddebc66caec2934a7b74741b0633cb3e736890abfbf730455962065a28d9eaaca366c16d7a376d410344ca5fb7f24d712bd5efb4e6e'
+            '115ef1080baac2917bd82561e138f6bd018caa41e3c385c09ba1b5dce20ed377315ba52f27f76044b6354aa40476a8ca2207557e59e1e330f6f4d6cc53122a4a'
             '4ebdb8a2c1298a7fb3b06dbbdf475205fc1e6880d82310c1b98a2d776e81c9ba88b218bee67b8c1a423ec17fc5ed522ab4dd42291f22cccb1621bbc0f9dd1c3e'
-            '8dec17190db9c0460f4008bcf8949f1de7a8fabf92f57f139015c6e590c81a1ee4f8bda23464322250e59cb77eaa85eb2c8005f1712c322124b6a6fd807af6ee'
-            'd13b1c93778ecda62ba3f58d953ae43891378786c434382b03282725d80f5afb53472173f86c744b3dccb13a0536e9dcf1403c39bfa46a90503a62deb61e1389'
+            '06c3eac336d5ff48d7653f5a2db883a45dc0dccae536a7d6f3d986e1032aa597b557d20be09e1c8f3d07b87e3d8d9b70aaff9c5479289b026f3576150e043a5c'
+            '54410a89aea637c1dff1df56ca46bd93e3678ff5242197879eb9e8d8b51572af67717bb9812ee10296358c5c8b11736d9a64a4967e49baa5381d78ca9aac04de'
             'b2c16569ef6d0601328f4a3f709f0a3f5c1d64b5914e7aeed2dfbef11f0d45b512a8a1cb7355e124a540d61a56e63deb0406be947c5f1efe5ce4bedf42998585')
 
 pkgver() {
   cd "${srcdir}/Cnchi/"
+
+  # Specifying the commit in the source line does not work
+  git checkout "${_commit}"
+
   echo "${_tagver}.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
 }
 

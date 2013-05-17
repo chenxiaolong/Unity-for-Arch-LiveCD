@@ -6,4 +6,4 @@ if [ "x${1}" = "x--autostart" ]; then
   sleep 3
 fi
 
-pkexec /usr/sbin/cnchi.real
+pkexec /usr/sbin/cnchi.real ${*}
