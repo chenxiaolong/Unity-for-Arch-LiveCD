@@ -6,7 +6,7 @@ _tagver=0.2.1
 
 pkgname=cnchi
 pkgver=0.2.1.r500.f3605e5
-pkgrel=1
+pkgrel=2
 pkgdesc='Graphical Installer for Antergos Linux'
 arch=('any')
 license=('GPL')
@@ -18,13 +18,15 @@ source=("Cnchi::git+https://github.com/Antergos/Cnchi.git"
         'cnchi.desktop'
         'cnchi.bin'
         'cnchi.real.sbin'
-        'to.epac.cxl.pkexec.cnchi.policy')
+        'to.epac.cxl.pkexec.cnchi.policy'
+        'unity.png')
 sha512sums=('SKIP'
             'd04c52afa80a6b9f721b4a3b4767f67705ed15611dcc4e191e265bea132c9b802a4712e941d9273b4ef809ef5ccbde37660d8e1b64c13c8253ce7c2b9058d419'
             '4ebdb8a2c1298a7fb3b06dbbdf475205fc1e6880d82310c1b98a2d776e81c9ba88b218bee67b8c1a423ec17fc5ed522ab4dd42291f22cccb1621bbc0f9dd1c3e'
             '06c3eac336d5ff48d7653f5a2db883a45dc0dccae536a7d6f3d986e1032aa597b557d20be09e1c8f3d07b87e3d8d9b70aaff9c5479289b026f3576150e043a5c'
             '54410a89aea637c1dff1df56ca46bd93e3678ff5242197879eb9e8d8b51572af67717bb9812ee10296358c5c8b11736d9a64a4967e49baa5381d78ca9aac04de'
-            'b2c16569ef6d0601328f4a3f709f0a3f5c1d64b5914e7aeed2dfbef11f0d45b512a8a1cb7355e124a540d61a56e63deb0406be947c5f1efe5ce4bedf42998585')
+            'b2c16569ef6d0601328f4a3f709f0a3f5c1d64b5914e7aeed2dfbef11f0d45b512a8a1cb7355e124a540d61a56e63deb0406be947c5f1efe5ce4bedf42998585'
+            '670e38f76e681401b4dd30366f351fedb1082171804aec0a057a161b1f46ba5a67d9c655ccc5f0a837ef7396c1c8f1aba4e25b92eaa6c4851bb770974387fec6')
 
 pkgver() {
   cd "${srcdir}/Cnchi/"
@@ -51,7 +53,7 @@ package() {
     cp -R ${i} "${pkgdir}/usr/share/cnchi/"
   done
 
-  cp "${pkgdir}"/usr/share/cnchi/data/desktops/{gnome,unity}.png
+  install -m644 "${srcdir}/unity.png" "${pkgdir}/usr/share/cnchi/data/desktops/"
 
   install -dm755 "${pkgdir}/usr/share/applications/"
   install -m644 "${srcdir}/cnchi.desktop" "${pkgdir}/usr/share/applications/"
