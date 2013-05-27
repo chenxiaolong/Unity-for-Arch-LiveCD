@@ -1,24 +1,34 @@
-From 245d6ed6e7cb397a705353fd70e9333806108004 Mon Sep 17 00:00:00 2001
+From 1140040c26c1915baa33b019139270c21d35dcd1 Mon Sep 17 00:00:00 2001
 From: Xiao-Long Chen <chenxiaolong@cxl.epac.to>
-Date: Fri, 17 May 2013 14:43:27 -0400
+Date: Mon, 27 May 2013 17:32:47 -0400
 Subject: [PATCH] Modifications for Unity-for-Arch
 
 ---
- cnchi.py                    |  10 ++-
- data/packages.xml           | 202 +++++++++++++++++++++++++++++++++++++++-----
- scripts/postinstall.sh      | 190 ++++-------------------------------------
- scripts/set-settings        | 146 --------------------------------
+ cnchi.py                    |  12 ++-
+ data/packages.xml           | 201 ++++++++++++++++++++++++++++++++-----
+ scripts/postinstall.sh      | 235 +++-----------------------------------------
+ scripts/set-settings        | 146 ---------------------------
  src/config.py               |   2 +-
- src/desktop.py              |  12 ++-
- src/installation_process.py |  40 ++++-----
- 7 files changed, 231 insertions(+), 371 deletions(-)
+ src/desktop.py              |  10 +-
+ src/installation_process.py |  40 ++++----
+ ui/check.ui                 |   1 +
+ 8 files changed, 229 insertions(+), 418 deletions(-)
  delete mode 100755 scripts/set-settings
 
 diff --git a/cnchi.py b/cnchi.py
-index 48be1e8..ede2894 100755
+index 91c26d5..6cf2a4d 100755
 --- a/cnchi.py
 +++ b/cnchi.py
-@@ -342,10 +342,12 @@ if __name__ == '__main__':
+@@ -78,7 +78,7 @@ _enable_alongside = False
+ 
+ # Enabled desktops
+ #_desktops = [ "gnome", "cinnamon", "xfce", "razor", "openbox", "lxde", "enlightenment", "kde", "nox" ]
+-_desktops = [ "gnome", "cinnamon", "xfce", "razor", "openbox", "nox" ]
++_desktops = [ "unity", "gnome", "cinnamon", "xfce", "razor", "openbox", "nox" ]
+ 
+ # Useful vars for gettext (translations)
+ APP = "cnchi"
+@@ -356,10 +356,12 @@ if __name__ == '__main__':
              log._debug = True
              log.debug("Debug mode on")
          elif opt in ('-u', '--update'):
@@ -36,7 +46,7 @@ index 48be1e8..ede2894 100755
              _alternate_package_list = arg
          elif opt in ('-a', '--aria2'):
 diff --git a/data/packages.xml b/data/packages.xml
-index 7d14b06..2665116 100644
+index e5dbeaf..04fc58f 100644
 --- a/data/packages.xml
 +++ b/data/packages.xml
 @@ -1,11 +1,9 @@
@@ -52,19 +62,16 @@ index 7d14b06..2665116 100644
  		<pkgname>haveged</pkgname>
  		<pkgname>crda</pkgname>
  		<pkgname>ipw2200-fw</pkgname>
-@@ -19,18 +17,15 @@
+@@ -19,17 +17,13 @@
  		<pkgname>xorg-server</pkgname>
  		<pkgname>xorg-server-utils</pkgname>
  		<pkgname>sudo</pkgname>
 -		<pkgname>pacmanxg4</pkgname>
  		<pkgname>pkgfile</pkgname>
 -		<pkgname>chromium</pkgname>
--		<pkgname>flashplugin</pkgname>
 +		<!-- Chromium has no webapps support -->
 +		<!-- <pkgname>chromium</pkgname> -->
 +		<pkgname>firefox</pkgname>
-+		<!-- Not everyone wants closed source software by default -->
-+		<!-- <pkgname>flashplugin</pkgname> -->
  		<pkgname>alsa-utils</pkgname>
  		<pkgname>whois</pkgname>
  		<pkgname>dnsutils</pkgname>
@@ -76,7 +83,7 @@ index 7d14b06..2665116 100644
  		<pkgname>unzip</pkgname>
  		<pkgname>unrar</pkgname>
  		<pkgname>net-tools</pkgname>
-@@ -57,7 +52,6 @@
+@@ -56,7 +50,6 @@
  		<pkgname>empathy</pkgname>
  		<pkgname>transmission-gtk</pkgname>
  		<pkgname>xnoise</pkgname>
@@ -84,7 +91,7 @@ index 7d14b06..2665116 100644
  		<pkgname>shotwell</pkgname>
  		<pkgname>gnome-themes-standard</pkgname>
  		<pkgname>hicolor-icon-theme</pkgname>
-@@ -67,7 +61,6 @@
+@@ -66,7 +59,6 @@
  		<pkgname>gnome-shell</pkgname>
  		<pkgname>gnome-control-center</pkgname>
  		<pkgname>nautilus</pkgname>
@@ -92,7 +99,7 @@ index 7d14b06..2665116 100644
  		<pkgname>gstreamer0.10-bad-plugins</pkgname>
  		<pkgname>gstreamer0.10-base-plugins</pkgname>
  		<pkgname>gstreamer0.10-ffmpeg</pkgname>
-@@ -94,7 +87,6 @@
+@@ -92,7 +84,6 @@
  		<pkgname>empathy</pkgname>
  		<pkgname>transmission-gtk</pkgname>
  		<pkgname>xnoise</pkgname>
@@ -100,7 +107,7 @@ index 7d14b06..2665116 100644
  		<pkgname>shotwell</pkgname>
  		<pkgname>gnome-themes-standard</pkgname>
  		<pkgname>hicolor-icon-theme</pkgname>
-@@ -105,14 +97,12 @@
+@@ -103,13 +94,11 @@
  		<pkgname>cinnamon-control-center</pkgname>
  		<pkgname>cinnamon-screensaver</pkgname>
  		<pkgname>nemo</pkgname>
@@ -109,13 +116,12 @@ index 7d14b06..2665116 100644
  		<pkgname>gstreamer0.10-base-plugins</pkgname>
  		<pkgname>gstreamer0.10-ffmpeg</pkgname>
  		<pkgname>gstreamer0.10-good-plugins</pkgname>
- 		<pkgname>gstreamer0.10-ugly-plugins</pkgname>
  		<pkgname>gst-libav</pkgname>
 -		<pkgname>cinnamon-theme-nadia</pkgname>
  	</cinnamon_desktop>
  
  	<xfce_desktop>
-@@ -134,7 +124,6 @@
+@@ -131,14 +120,12 @@
  		<pkgname>transmission-gtk</pkgname>
  		<pkgname>pidgin</pkgname>
  		<pkgname>gnome-calculator</pkgname>
@@ -123,27 +129,40 @@ index 7d14b06..2665116 100644
  		<pkgname>gstreamer0.10-bad-plugins</pkgname>
  		<pkgname>gstreamer0.10-base-plugins</pkgname>
  		<pkgname>gstreamer0.10-ffmpeg</pkgname>
-@@ -142,7 +131,6 @@
- 		<pkgname>gstreamer0.10-ugly-plugins</pkgname>
+ 		<pkgname>gstreamer0.10-good-plugins</pkgname>
  		<pkgname>gst-libav</pkgname>
  		<pkgname>xdg-user-dirs-gtk</pkgname>
 -		<pkgname>hotot-gtk3</pkgname>
  	</xfce_desktop>
  
  	<razor_desktop>
-@@ -162,9 +150,181 @@
+@@ -160,7 +147,6 @@
  		<pkgname>kdegraphics-ksnapshot</pkgname>
  		<pkgname>transmission-qt</pkgname>
  		<pkgname>phonon-vlc</pkgname>
 -		<pkgname>hotot-qt</pkgname>
  	</razor_desktop>
--	
-+
+ 
+ 	<openbox_desktop>
+@@ -180,7 +166,6 @@
+ 		<pkgname nm='true' name='NetworkManager'>network-manager-applet</pkgname>
+         <pkgname>lxterminal</pkgname>
+         <pkgname>mousepad</pkgname>
+-        <pkgname>zukitwo-theme-openbox</pkgname>
+         <pkgname>openbox-menu</pkgname>
+         <pkgname>compton</pkgname>
+         <pkgname>xorg-xinit</pkgname>
+@@ -189,11 +174,183 @@
+         <pkgname>slimlock</pkgname>
+     </openbox_desktop>
+ 
+-	<!-- Third party software. Some of them propietary -->
+-	<third_party>
 +	<unity_desktop>
 +		<!-- Unity-for-Arch -->
 +		<pkgname>appmenu-gtk2</pkgname>
 +		<pkgname>appmenu-gtk3</pkgname>
-+		<pkgname>bamfdaemon</pkgname>
++		<pkgname>bamf</pkgname>
 +		<pkgname>compiz-ubuntu</pkgname>
 +		<pkgname>credentials-preferences-ubuntu</pkgname>
 +		<pkgname>evemu</pkgname>
@@ -171,7 +190,6 @@ index 7d14b06..2665116 100644
 +		<pkgname>indicator-sound</pkgname>
 +		<pkgname>libappindicator</pkgname>
 +		<pkgname>libappindicator3</pkgname>
-+		<pkgname>libbamf3</pkgname>
 +		<pkgname>libdbusmenu</pkgname>
 +		<pkgname>libdbusmenu-gtk2</pkgname>
 +		<pkgname>libdbusmenu-gtk3</pkgname>
@@ -188,7 +206,7 @@ index 7d14b06..2665116 100644
 +		<pkgname>libunity-webapps</pkgname>
 +		<pkgname>metacity-ubuntu</pkgname>
 +		<pkgname>nautilus-ubuntu</pkgname>
-+		<pkgname>network-manager-applet-ubuntu</pkgname>
++		<pkgname nm='true' name='NetworkManager'>network-manager-applet-ubuntu</pkgname>
 +		<pkgname>nux</pkgname>
 +		<pkgname>overlay-scrollbar</pkgname>
 +		<pkgname>python-oauthlib</pkgname>
@@ -312,21 +330,20 @@ index 7d14b06..2665116 100644
 +		<pkgname>ubuntu-default-settings</pkgname>
 +	</unity_desktop>
 +
++	<!-- Not everyone wants closed source software by default -->
++	<!--<third_party>
+ 		<pkgname>flashplugin</pkgname>
+ 		<pkgname>gstreamer0.10-ugly-plugins</pkgname>
+-	</third_party>
++	</third_party>-->
+ 
  	<graphics>
  		<nvidia>
- 			<pkgname>xf86-video-nouveau</pkgname>
-@@ -264,4 +424,4 @@
- 			<pkgname>refind-efi</pkgname>
- 		</refind>
- 	</bootloaders>
--</packages>
-\ No newline at end of file
-+</packages>
 diff --git a/scripts/postinstall.sh b/scripts/postinstall.sh
-index 8f55054..394e6cd 100644
+index 40bdea5..1218e86 100644
 --- a/scripts/postinstall.sh
 +++ b/scripts/postinstall.sh
-@@ -1,171 +1,11 @@
+@@ -1,216 +1,11 @@
 -set_synaptics()
 -{
 -    cat << EOF > ${DESTDIR}/etc/X11/xorg.conf.d/50-synaptics.conf 
@@ -390,14 +407,18 @@ index 8f55054..394e6cd 100644
 -		sed -i "s/'us'/'${KEYBOARD_LAYOUT}+${KEYBOARD_VARIANT}'/" /usr/share/cnchi/scripts/set-settings
 -	else
 -		sed -i "s/'us'/'${KEYBOARD_LAYOUT}'/" /usr/share/cnchi/scripts/set-settings
--
--	# Set gsettings
+-        fi
++unity_settings(){
+ 	# Set gsettings
 -	cp /usr/share/cnchi/scripts/set-settings ${DESTDIR}/usr/bin/set-settings
 -	mkdir -p ${DESTDIR}/var/run/dbus
 -	mount -o bind /var/run/dbus ${DESTDIR}/var/run/dbus
 -	chroot ${DESTDIR} su -c "/usr/bin/set-settings ${DESKTOP}" ${USER_NAME} >/dev/null 2>&1
 -	rm ${DESTDIR}/usr/bin/set-settings
--
++	#mkdir -p ${DESTDIR}/var/run/dbus
++	#mount -o bind /var/run/dbus ${DESTDIR}/var/run/dbus
++	#chroot ${DESTDIR} su -c "dbus-launch gsettings set org.gnome.desktop.input-sources sources \"[('xkb','${LANG_CODE}')]\"" ${USER_NAME}
+ 
 -	# Set skel directory
 -	cp -R ${DESTDIR}/home/${USER_NAME}/.config ${DESTDIR}/etc/skel
 -
@@ -414,13 +435,12 @@ index 8f55054..394e6cd 100644
 -		sed -i "s/'us'/'${KEYBOARD_LAYOUT}+${KEYBOARD_VARIANT}'/" /usr/share/cnchi/scripts/set-settings
 -	else
 -		sed -i "s/'us'/'${KEYBOARD_LAYOUT}'/" /usr/share/cnchi/scripts/set-settings
--
+-        fi
 -	# copy antergos menu icon
 -	mkdir -p ${DESTDIR}/usr/share/antergos/
 -	cp /usr/share/antergos/antergos-menu.png ${DESTDIR}/usr/share/antergos/antergos-menu.png
 -
-+unity_settings(){
- 	# Set gsettings
+-	# Set gsettings
 -	cp /usr/share/cnchi/scripts/set-settings ${DESTDIR}/usr/bin/set-settings
 -	mkdir -p ${DESTDIR}/var/run/dbus
 -	mount -o bind /var/run/dbus ${DESTDIR}/var/run/dbus
@@ -456,10 +476,7 @@ index 8f55054..394e6cd 100644
 -	mount -o bind /var/run/dbus ${DESTDIR}/var/run/dbus
 -	chroot ${DESTDIR} su -c "/usr/bin/set-settings ${DESKTOP}" ${USER_NAME} >/dev/null 2>&1
 -	rm ${DESTDIR}/usr/bin/set-settings
-+	#mkdir -p ${DESTDIR}/var/run/dbus
-+	#mount -o bind /var/run/dbus ${DESTDIR}/var/run/dbus
-+	#chroot ${DESTDIR} su -c "dbus-launch gsettings set org.gnome.desktop.input-sources sources \"[('xkb','${LANG_CODE}')]\"" ${USER_NAME}
- 
+-
 -	# Set skel directory
 -	cp -R ${DESTDIR}/home/${USER_NAME}/.config ${DESTDIR}/etc/skel
 -
@@ -469,6 +486,51 @@ index 8f55054..394e6cd 100644
 -	# Set xfce in .dmrc
 -	echo "[Desktop]" > ${DESTDIR}/home/${USER_NAME}/.dmrc
 -	echo "Session=xfce" >> ${DESTDIR}/home/${USER_NAME}/.dmrc
+-}
+-
+-openbox_settings(){
+-	# Set Adwaita cursor theme
+-	chroot ${DESTDIR} ln -s /usr/share/icons/Adwaita /usr/share/icons/default
+-
+-	# copy antergos menu icon
+-	mkdir -p ${DESTDIR}/usr/share/antergos/
+-	cp /usr/share/antergos/antergos-menu.png ${DESTDIR}/usr/share/antergos/antergos-menu.png
+-
+-	# Set settings
+-    
+-    # Get zip file from github, unzip it and copy all setup files in their right places.
+-    mkdir -p ${DESTDIR}/tmp
+-    wget -q -O ${DESTDIR}/tmp/master.zip "https://github.com/Antergos/openbox-setup/archive/master.zip"
+-    unzip -d ${DESTDIR}/tmp ${DESTDIR}/tmp/master.zip
+-    # copy slim theme
+-    mkdir -p ${DESTDIR}/usr/share/slim/themes/antergos-slim
+-    cp ${DESTDIR}/tmp/openbox-setup-master/antergos-slim/* ${DESTDIR}/usr/share/slim/themes/antergos-slim
+-    # copy home files
+-    cp ${DESTDIR}/tmp/openbox-setup-master/gtkrc-2.0 ${DESTDIR}/home/${USER_NAME}/.gtkrc-2.0
+-    chown ${USER_NAME}:users ${DESTDIR}/home/${USER_NAME}/.gtkrc-2.0
+-    cp ${DESTDIR}/tmp/openbox-setup-master/xinitrc ${DESTDIR}/home/${USER_NAME}/.xinitrc
+-    chown ${USER_NAME}:users ${DESTDIR}/home/${USER_NAME}/.xinitrc
+-    # copy .config files
+-    cp -R ${DESTDIR}/tmp/openbox-setup-master/config/* ${DESTDIR}/home/${USER_NAME}/.config
+-    # copy /etc setup files
+-    cp -R ${DESTDIR}/tmp/openbox-setup-master/etc/* ${DESTDIR}/etc
+-	
+-    chroot ${DESTDIR} chown -R ${USER_NAME}:users /home/${USER_NAME}/.config
+-	cp /usr/share/cnchi/scripts/set-settings ${DESTDIR}/usr/bin/set-settings
+-	mkdir -p ${DESTDIR}/var/run/dbus
+-	mount -o bind /var/run/dbus ${DESTDIR}/var/run/dbus
+-	chroot ${DESTDIR} su -c "/usr/bin/set-settings ${DESKTOP}" ${USER_NAME} >/dev/null 2>&1
+-	rm ${DESTDIR}/usr/bin/set-settings
+-
+-	# Set skel directory
+-	cp -R ${DESTDIR}/home/${USER_NAME}/.config ${DESTDIR}/etc/skel
+-
+-	## Set defaults directories
+-	chroot ${DESTDIR} su -c xdg-user-dirs-update ${USER_NAME}
+-
+-	# Set openbox in .dmrc
+-	echo "[Desktop]" > ${DESTDIR}/home/${USER_NAME}/.dmrc
+-	echo "Session=openbox" >> ${DESTDIR}/home/${USER_NAME}/.dmrc
 -}
 -
 -razor_settings(){
@@ -503,8 +565,8 @@ index 8f55054..394e6cd 100644
 +	echo 'Session=ubuntu' >> ${DESTDIR}/home/${USER_NAME}/.dmrc
  }
  
- postinstall(){
-@@ -180,17 +20,19 @@ postinstall(){
+ nox_settings(){
+@@ -228,17 +23,19 @@ postinstall(){
  	"${DESKTOP}_settings"
  
  	## Unmute alsa channels
@@ -685,34 +747,39 @@ index 889a5d8..0000000
 -fi
 -
 diff --git a/src/config.py b/src/config.py
-index fa9680c..d133bf5 100644
+index bd20568..dffbefe 100644
 --- a/src/config.py
 +++ b/src/config.py
-@@ -56,7 +56,7 @@ class Settings():
-             'timezone_longitude' : 0, \
-             'timezone_done' : False, \
+@@ -58,7 +58,7 @@ class Settings():
              'use_ntp' : True, \
+             'third_party_software' : False, \
+             'desktops' : [], \
 -            'desktop' : 'gnome', \
 +            'desktop' : 'unity', \
-             'desktop_mode' : 'vanilla', \
              'partition_mode' : 'easy', \
              'auto_device' : '/dev/sda', \
+             'log_file' : '/tmp/cnchi.log', \
 diff --git a/src/desktop.py b/src/desktop.py
-index 5dcfe3e..a6e4fe1 100644
+index 7e525c1..0107ae5 100644
 --- a/src/desktop.py
 +++ b/src/desktop.py
-@@ -56,7 +56,7 @@ class DesktopAsk(Gtk.Box):
+@@ -56,11 +56,12 @@ class DesktopAsk(Gtk.Box):
  
          self.ui.connect_signals(self)
  
 -        self.desktop_choice = 'gnome'
 +        self.desktop_choice = 'unity'
-         self.desktop_mode = 'vanilla'
- 
-         self.set_desktop_list()
-@@ -122,6 +122,11 @@ class DesktopAsk(Gtk.Box):
-             "an intuitive interface.")
-             txt = "<span weight='bold'>RAZOR-QT</span>\n" + txt
+         
+         self.enabled_desktops = self.settings.get("desktops")
+                
+         self.desktops = {
++         "unity" : "Unity",
+          "gnome" : "Gnome",
+          "cinnamon" : "Cinnamon",
+          "xfce" : "Xfce",
+@@ -138,6 +139,11 @@ class DesktopAsk(Gtk.Box):
+             txt = _("Don't install any desktop.")
+             txt = "<span weight='bold'>NoX</span>\n" + txt
              
 +        elif desktop == 'unity':
 +            txt = _("Unity is an easy to use desktop shell that tries " \
@@ -722,40 +789,29 @@ index 5dcfe3e..a6e4fe1 100644
          label.set_markup(txt)
  
          image.set_from_file(self.desktops_dir + desktop + ".png")
-@@ -150,8 +155,9 @@ class DesktopAsk(Gtk.Box):
-         # liststore_desktop.append(['Enlightment'])
-         # liststore_desktop.append(['KDE'])
-         liststore_desktop.append(['Razor-qt'])
-+        liststore_desktop.append(['Unity'])
- 
+@@ -166,7 +172,7 @@ class DesktopAsk(Gtk.Box):
+         for n in names:
+             liststore_desktop.append([n])
+                 
 -        self.select_default_row(self.treeview_desktop, 'Gnome')
 +        self.select_default_row(self.treeview_desktop, 'Unity')
  
      def set_desktop(self, desktop):
-         if desktop == 'Gnome':
-@@ -170,6 +176,8 @@ class DesktopAsk(Gtk.Box):
-             self.desktop_choice = 'kde'
-         elif desktop == 'Razor-qt':
-             self.desktop_choice = 'razor'
-+        elif desktop == 'Unity':
-+            self.desktop_choice = 'unity'
- 
-         self.translate_ui(self.desktop_choice, self.desktop_mode)
-                 
+         for k in self.desktops.keys():
 diff --git a/src/installation_process.py b/src/installation_process.py
-index 1ed37d2..5ed559b 100644
+index 08fee23..5f644c9 100644
 --- a/src/installation_process.py
 +++ b/src/installation_process.py
-@@ -84,7 +84,7 @@ class InstallationProcess(Process):
+@@ -85,7 +85,7 @@ class InstallationProcess(Process):
  
          # Check desktop selected to load packages needed
          self.desktop = self.settings.get('desktop')
 -        self.desktop_manager = 'gdm'
 +        self.desktop_manager = 'lightdm'
+         self.network_manager = 'NetworkManager'
          self.card = []
-     
-         self.fs_devices = fs_devices
-@@ -280,11 +280,14 @@ class InstallationProcess(Process):
+         # Packages to be removed
+@@ -287,11 +287,14 @@ class InstallationProcess(Process):
                  tmp_file.write("SigLevel = PackageRequired\n")
                  tmp_file.write("Include = /etc/pacman.d/mirrorlist\n")
  
@@ -775,7 +831,7 @@ index 1ed37d2..5ed559b 100644
          
          ## Init pyalpm
  
-@@ -336,7 +339,7 @@ class InstallationProcess(Process):
+@@ -343,7 +346,7 @@ class InstallationProcess(Process):
              self.queue_event('info', "Getting package list...")
  
              try:
@@ -784,7 +840,7 @@ index 1ed37d2..5ed559b 100644
              except URLError as e:
                  # If the installer can't retrieve the remote file, try to install with a local
                  # copy, that may not be updated
-@@ -634,16 +637,6 @@ class InstallationProcess(Process):
+@@ -652,16 +655,6 @@ class InstallationProcess(Process):
          if not os.path.exists(grub_d_dir):
              os.makedirs(grub_d_dir)
  
@@ -801,7 +857,7 @@ index 1ed37d2..5ed559b 100644
          locale = self.settings.get("locale")
          self.chroot(['sh', '-c', 'LANG=%s /usr/sbin/grub-mkconfig -o /boot/grub/grub.cfg' % locale])
          
-@@ -721,10 +714,10 @@ class InstallationProcess(Process):
+@@ -740,10 +733,10 @@ class InstallationProcess(Process):
          self.queue_event("action", _("Configuring your new system"))
  
          # Copy important config files to target system
@@ -814,8 +870,8 @@ index 1ed37d2..5ed559b 100644
 +        #    shutil.copy2(path, os.path.join(self.dest_dir, 'etc/'))
  
          # enable services      
-         self.enable_services([ self.desktop_manager, "NetworkManager" ])
-@@ -763,14 +756,15 @@ class InstallationProcess(Process):
+         self.enable_services([ self.desktop_manager, self.network_manager ])
+@@ -782,14 +775,15 @@ class InstallationProcess(Process):
          
          
          self.chroot(['useradd', '-m', '-s', '/bin/bash', \
@@ -834,6 +890,18 @@ index 1ed37d2..5ed559b 100644
          
          hostname_path = os.path.join(self.dest_dir, "etc/hostname")
          if not os.path.exists(hostname_path):
+diff --git a/ui/check.ui b/ui/check.ui
+index 5d2db27..da35a0d 100644
+--- a/ui/check.ui
++++ b/ui/check.ui
+@@ -96,6 +96,7 @@
+             <property name="can_focus">False</property>
+             <child>
+               <object class="GtkBox" id="third_party_vbox">
++                <property name="sensitive">False</property>
+                 <property name="visible">True</property>
+                 <property name="can_focus">False</property>
+                 <property name="orientation">vertical</property>
 -- 
 1.8.2.3
 
