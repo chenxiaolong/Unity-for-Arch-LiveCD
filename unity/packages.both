@@ -60,7 +60,7 @@ zsh
 # Unity-for-Arch
 appmenu-gtk2
 appmenu-gtk3
-bamfdaemon
+bamf
 compiz-ubuntu
 credentials-preferences-ubuntu
 evemu
@@ -88,7 +88,6 @@ indicator-session
 indicator-sound
 libappindicator
 libappindicator3
-libbamf3
 libdbusmenu
 libdbusmenu-gtk2
 libdbusmenu-gtk3
