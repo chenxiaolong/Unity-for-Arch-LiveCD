@@ -75,6 +75,7 @@ grail
 gsettings-desktop-schemas-ubuntu
 gtk2-ubuntu
 gtk3-ubuntu
+hud
 ido
 indicator-applet
 indicator-application
