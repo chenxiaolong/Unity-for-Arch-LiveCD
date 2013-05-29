@@ -1,18 +1,18 @@
-From 1837011b5ff27cf2d7a4a3157c7efa7d0b77e38e Mon Sep 17 00:00:00 2001
+From 12e94406a8d1dc09706199db7927ab77557cbf96 Mon Sep 17 00:00:00 2001
 From: Xiao-Long Chen <chenxiaolong@cxl.epac.to>
-Date: Mon, 27 May 2013 17:32:47 -0400
+Date: Wed, 29 May 2013 14:07:42 -0400
 Subject: [PATCH] Modifications for Unity-for-Arch
 
 ---
  cnchi.py                    |  12 ++-
- data/packages.xml           | 201 ++++++++++++++++++++++++++++++++-----
+ data/packages.xml           | 202 ++++++++++++++++++++++++++++++++-----
  scripts/postinstall.sh      | 235 +++-----------------------------------------
  scripts/set-settings        | 146 ---------------------------
  src/config.py               |   2 +-
  src/desktop.py              |  10 +-
  src/installation_process.py |  40 ++++----
  ui/check.ui                 |   1 +
- 8 files changed, 229 insertions(+), 418 deletions(-)
+ 8 files changed, 230 insertions(+), 418 deletions(-)
  delete mode 100755 scripts/set-settings
 
 diff --git a/cnchi.py b/cnchi.py
@@ -46,7 +46,7 @@ index 3d50506..c864e1c 100755
              _alternate_package_list = arg
          elif opt in ('-a', '--aria2'):
 diff --git a/data/packages.xml b/data/packages.xml
-index 8c687b5..5739efd 100644
+index 8c687b5..aa9c285 100644
 --- a/data/packages.xml
 +++ b/data/packages.xml
 @@ -1,11 +1,9 @@
@@ -155,7 +155,7 @@ index 8c687b5..5739efd 100644
          <pkgname>openbox-menu</pkgname>
          <pkgname>compton</pkgname>
          <pkgname>xorg-xinit</pkgname>
-@@ -192,11 +177,183 @@
+@@ -192,11 +177,184 @@
          <pkgname>slimlock</pkgname>
      </openbox_desktop>
  
@@ -180,6 +180,7 @@ index 8c687b5..5739efd 100644
 +		<pkgname>gsettings-desktop-schemas-ubuntu</pkgname>
 +		<pkgname>gtk2-ubuntu</pkgname>
 +		<pkgname>gtk3-ubuntu</pkgname>
++		<pkgname>hud</pkgname>
 +		<pkgname>ido</pkgname>
 +		<pkgname>indicator-applet</pkgname>
 +		<pkgname>indicator-application</pkgname>
