@@ -34,11 +34,13 @@ SigLevel = Optional TrustAll
 Server = http://dl.dropbox.com/u/486665/Repos/Unity-for-Arch-LiveCD/\$arch
 EOF
 
-#sed 's#\(^ExecStart=-/sbin/agetty\)#\1 --autologin root#;
-#     s#\(^Alias=getty.target.wants/\).\+#\1autologin@tty1.service#' \
-#     /usr/lib/systemd/system/getty@.service > /etc/systemd/system/autologin@.service
+# Create /etc/systemd/system/getty@tty1.service.d/autologin.conf with the
+# following to autologin to TTY1
+# ---
+# [Service]
+# ExecStart=-/sbin/agetty --autologin root --noclear %I 38400 linux
+# ---
 
-#systemctl disable getty@tty1.service
-#systemctl enable multi-user.target pacman-init.service autologin@.service dhcpcd.service
+#systemctl enable multi-user.target pacman-init.service dhcpcd.service
 
 systemctl enable graphical.target pacman-init.service NetworkManager.service lightdm.service
