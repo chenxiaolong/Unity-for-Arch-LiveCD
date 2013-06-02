@@ -41,6 +41,12 @@ EOF
 # ExecStart=-/sbin/agetty --autologin root --noclear %I 38400 linux
 # ---
 
-#systemctl enable multi-user.target pacman-init.service dhcpcd.service
+# Create /etc/udev/rules.d/81-dhcpcd.rules with the following to use dhcpcd
+# for networking
+# ---
+# ACTION=="add", SUBSYSTEM=="net", ENV{SYSTEMD_WANTS}="dhcpcd@$name.service"
+# ---
+
+#systemctl enable multi-user.target pacman-init.service
 
 systemctl enable graphical.target pacman-init.service NetworkManager.service lightdm.service
