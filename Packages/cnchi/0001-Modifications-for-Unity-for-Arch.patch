@@ -1,25 +1,25 @@
-From 55008eb85642a696756761c59b0bfa811fe63fdf Mon Sep 17 00:00:00 2001
+From dcfcb3c5e3bcbf08a164d9b61bcf8e40ea81e0d3 Mon Sep 17 00:00:00 2001
 From: Xiao-Long Chen <chenxiaolong@cxl.epac.to>
-Date: Wed, 29 May 2013 14:07:42 -0400
+Date: Sun, 9 Jun 2013 12:48:14 -0400
 Subject: [PATCH] Modifications for Unity-for-Arch
 
 ---
- cnchi.py                    |  12 ++-
- data/packages.xml           | 202 ++++++++++++++++++++++++++++++++----
+ cnchi.py                    |  13 +--
+ data/packages.xml           | 203 ++++++++++++++++++++++++++++++++----
  scripts/postinstall.sh      | 244 +++-----------------------------------------
  scripts/set-settings        | 146 --------------------------
  src/config.py               |   2 +-
  src/desktop.py              |  10 +-
  src/installation_process.py |  40 +++-----
  ui/check.ui                 |   1 +
- 8 files changed, 230 insertions(+), 427 deletions(-)
+ 8 files changed, 231 insertions(+), 428 deletions(-)
  delete mode 100755 scripts/set-settings
 
 diff --git a/cnchi.py b/cnchi.py
-index 0c3ab62..16d7269 100755
+index 650cd03..07fef80 100755
 --- a/cnchi.py
 +++ b/cnchi.py
-@@ -78,7 +78,7 @@ _enable_alongside = False
+@@ -75,7 +75,7 @@ _enable_alongside = False
  
  # Enabled desktops
  #_desktops = [ "gnome", "cinnamon", "xfce", "razor", "openbox", "lxde", "enlightenment", "kde" ]
@@ -28,25 +28,26 @@ index 0c3ab62..16d7269 100755
  
  # Useful vars for gettext (translations)
  APP = "cnchi"
-@@ -358,10 +358,12 @@ if __name__ == '__main__':
-             log._debug = True
-             log.debug("Debug mode on")
-         elif opt in ('-u', '--update'):
--            upd = updater.Updater()
--            if upd.update():
--                print("Program updated! Restarting...")
--                os.execl(sys.executable, *([sys.executable] + sys.argv))
-+            print('This version is patched for the Unity-for-Arch LiveCD and cannot use upstream\n'
-+                  'updates (unless you want a broken system). The LiveCD contains a repository\n'
-+                  'with automatically compiled updates. Just run:\n\n'
-+                  '  sudo pacman -Sy && sudo pacman -S cnchi\n\n'
-+                  'to update to the latest installer.')
-+            sys.exit(1)
-         elif opt in ('-p', '--packages'):
-             _alternate_package_list = arg
-         elif opt in ('-a', '--aria2'):
+@@ -393,11 +393,12 @@ if __name__ == '__main__':
+         
+     # Check if program needs to be updated
+     if update:
+-        upd = updater.Updater()
+-        if upd.update():
+-            logging.info("Program updated! Restarting...")
+-            os.execl(sys.executable, *([sys.executable] + sys.argv))
+-            sys.exit(0)
++        print('This version is patched for the Unity-for-Arch LiveCD and cannot use upstream\n'
++              'updates (unless you want a broken system). The LiveCD contains a repository\n'
++              'with automatically compiled updates. Just run:\n\n'
++              '  sudo pacman -Sy && sudo pacman -S cnchi\n\n'
++              'to update to the latest installer.')
++        sys.exit(1)
+ 
+     
+     # Start program #############################################
 diff --git a/data/packages.xml b/data/packages.xml
-index 12aac5c..a35d978 100644
+index 12aac5c..0638c0d 100644
 --- a/data/packages.xml
 +++ b/data/packages.xml
 @@ -1,11 +1,9 @@
@@ -155,7 +156,7 @@ index 12aac5c..a35d978 100644
                  <pkgname>openbox-menu</pkgname>
                  <pkgname>compton</pkgname>
                  <pkgname>xorg-xinit</pkgname>
-@@ -192,11 +177,184 @@
+@@ -192,11 +177,185 @@
                  <pkgname>slimlock</pkgname>
          </openbox_desktop>
  
@@ -222,6 +223,7 @@ index 12aac5c..a35d978 100644
 +		<pkgname>unity-lens-music</pkgname>
 +		<pkgname>unity-lens-photos</pkgname>
 +		<pkgname>unity-lens-video</pkgname>
++		<pkgname>unity-scopes</pkgname>
 +
 +		<!-- Unity-for-Arch-Extra -->
 +		<pkgname>accountsservice-ubuntu</pkgname>
@@ -773,7 +775,7 @@ index bd20568..dffbefe 100644
              'auto_device' : '/dev/sda', \
              'log_file' : '/tmp/cnchi.log', \
 diff --git a/src/desktop.py b/src/desktop.py
-index 9577545..a70c261 100644
+index 5716445..4f0dca1 100644
 --- a/src/desktop.py
 +++ b/src/desktop.py
 @@ -59,11 +59,12 @@ class DesktopAsk(Gtk.Box):
@@ -812,10 +814,10 @@ index 9577545..a70c261 100644
      def set_desktop(self, desktop):
          for k in self.desktops.keys():
 diff --git a/src/installation_process.py b/src/installation_process.py
-index a8187be..7b88a05 100644
+index 2e279b4..96dbd23 100644
 --- a/src/installation_process.py
 +++ b/src/installation_process.py
-@@ -86,7 +86,7 @@ class InstallationProcess(Process):
+@@ -87,7 +87,7 @@ class InstallationProcess(multiprocessing.Process):
  
          # Check desktop selected to load packages needed
          self.desktop = self.settings.get('desktop')
@@ -824,7 +826,7 @@ index a8187be..7b88a05 100644
          self.network_manager = 'NetworkManager'
          self.card = []
          # Packages to be removed
-@@ -297,11 +297,14 @@ class InstallationProcess(Process):
+@@ -305,11 +305,14 @@ class InstallationProcess(multiprocessing.Process):
                  tmp_file.write("SigLevel = PackageRequired\n")
                  tmp_file.write("Include = /etc/pacman.d/mirrorlist\n")
  
@@ -844,7 +846,7 @@ index a8187be..7b88a05 100644
          
          ## Init pyalpm
  
-@@ -353,7 +356,7 @@ class InstallationProcess(Process):
+@@ -361,7 +364,7 @@ class InstallationProcess(multiprocessing.Process):
              self.queue_event('info', "Getting package list...")
  
              try:
@@ -853,7 +855,7 @@ index a8187be..7b88a05 100644
              except URLError as e:
                  # If the installer can't retrieve the remote file, try to install with a local
                  # copy, that may not be updated
-@@ -667,16 +670,6 @@ class InstallationProcess(Process):
+@@ -675,16 +678,6 @@ class InstallationProcess(multiprocessing.Process):
          if not os.path.exists(grub_d_dir):
              os.makedirs(grub_d_dir)
  
@@ -870,7 +872,7 @@ index a8187be..7b88a05 100644
          locale = self.settings.get("locale")
          self.chroot(['sh', '-c', 'LANG=%s grub-mkconfig -o /boot/grub/grub.cfg' % locale])
          
-@@ -755,10 +748,10 @@ class InstallationProcess(Process):
+@@ -763,10 +756,10 @@ class InstallationProcess(multiprocessing.Process):
          self.queue_event("action", _("Configuring your new system"))
  
          # Copy important config files to target system
@@ -884,7 +886,7 @@ index a8187be..7b88a05 100644
  
          # enable services      
          self.enable_services([ self.desktop_manager, self.network_manager ])
-@@ -797,14 +790,15 @@ class InstallationProcess(Process):
+@@ -805,14 +798,15 @@ class InstallationProcess(multiprocessing.Process):
          
          
          self.chroot(['useradd', '-m', '-s', '/usr/bin/bash', \

@@ -1,11 +1,11 @@
 # Maintainer: Xiao-Long Chen <chenxiaolong@cxl.epac.to>
 # Original Maintainer: Alex Filgueira <alexfilgueira@antergos.com>
 
-_commit=b22816e6b8dd0a78bdfeeeb3be7b5af2b30a1373
+_commit=1f2f89eac634511177c9c163521dc1f6a9acb6e3
 _tagver=0.2.1
 
 pkgname=cnchi
-pkgver=0.2.1.r524.b22816e
+pkgver=0.2.1.r528.1f2f89e
 pkgrel=1
 pkgdesc='Graphical Installer for Antergos Linux'
 arch=('any')
@@ -21,7 +21,7 @@ source=("Cnchi::git+https://github.com/Antergos/Cnchi.git"
         'to.epac.cxl.pkexec.cnchi.policy'
         'unity.png')
 sha512sums=('SKIP'
-            '873ffa3d9a0ed6cffb7ba2833344076c9eafe0cc901bb887a89d283d4c80d44294006f6b7a7210e99b6bfccd3fcb52cfe65235c0be9de444d29635c72d839cda'
+            '78c05c4100fbcb89ebda27d4633e914cc7e7a4cabbf1df24d7c77f51c8b7363acb0fe11104affa2f1a2aa0ad24b9cdea5d4abf7ea616ac322e01e07a6d586f45'
             '4ebdb8a2c1298a7fb3b06dbbdf475205fc1e6880d82310c1b98a2d776e81c9ba88b218bee67b8c1a423ec17fc5ed522ab4dd42291f22cccb1621bbc0f9dd1c3e'
             '06c3eac336d5ff48d7653f5a2db883a45dc0dccae536a7d6f3d986e1032aa597b557d20be09e1c8f3d07b87e3d8d9b70aaff9c5479289b026f3576150e043a5c'
             '54410a89aea637c1dff1df56ca46bd93e3678ff5242197879eb9e8d8b51572af67717bb9812ee10296358c5c8b11736d9a64a4967e49baa5381d78ca9aac04de'
