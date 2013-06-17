@@ -6,7 +6,7 @@ _tagver=0.2.1
 
 pkgname=cnchi
 pkgver=0.2.1.r528.1f2f89e
-pkgrel=2
+pkgrel=3
 pkgdesc='Graphical Installer for Antergos Linux'
 arch=('any')
 license=('GPL')
@@ -21,7 +21,7 @@ source=("Cnchi::git+https://github.com/Antergos/Cnchi.git"
         'to.epac.cxl.pkexec.cnchi.policy'
         'unity.png')
 sha512sums=('SKIP'
-            'a36efcf8bcf965d248ece56a8a327be62e3a42b5b51943227f69d8d7b5f1017a0f369a73932746009054014d3e5144d51be42748e20c3621b423d134f675b9cb'
+            '59147f9635dc846963398b34466a26c85b4f85df0d5e4f89f7f928f5188ad721a558f8222610424dbc0894e53e54f6d3d97baba7fbffef2ca15de482292c2b28'
             '4ebdb8a2c1298a7fb3b06dbbdf475205fc1e6880d82310c1b98a2d776e81c9ba88b218bee67b8c1a423ec17fc5ed522ab4dd42291f22cccb1621bbc0f9dd1c3e'
             '06c3eac336d5ff48d7653f5a2db883a45dc0dccae536a7d6f3d986e1032aa597b557d20be09e1c8f3d07b87e3d8d9b70aaff9c5479289b026f3576150e043a5c'
             '54410a89aea637c1dff1df56ca46bd93e3678ff5242197879eb9e8d8b51572af67717bb9812ee10296358c5c8b11736d9a64a4967e49baa5381d78ca9aac04de'

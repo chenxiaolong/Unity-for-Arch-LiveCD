@@ -1,18 +1,18 @@
-From 0cd81207a90b3e5fc66395ef0d09b6b5f362d60a Mon Sep 17 00:00:00 2001
+From e9e08581f6e8db203b0537c32fe6ac82c089bd9e Mon Sep 17 00:00:00 2001
 From: Xiao-Long Chen <chenxiaolong@cxl.epac.to>
-Date: Sun, 9 Jun 2013 17:01:47 -0400
+Date: Mon, 17 Jun 2013 13:04:10 -0400
 Subject: [PATCH] Modifications for Unity-for-Arch
 
 ---
  cnchi.py                    |  13 +--
- data/packages.xml           | 202 ++++++++++++++++++++++++++++++++----
+ data/packages.xml           | 170 ++++++++++++++++++++++++++----
  scripts/postinstall.sh      | 244 +++-----------------------------------------
  scripts/set-settings        | 146 --------------------------
  src/config.py               |   2 +-
  src/desktop.py              |  10 +-
  src/installation_process.py |  40 +++-----
  ui/check.ui                 |   1 +
- 8 files changed, 230 insertions(+), 428 deletions(-)
+ 8 files changed, 198 insertions(+), 428 deletions(-)
  delete mode 100755 scripts/set-settings
 
 diff --git a/cnchi.py b/cnchi.py
@@ -47,7 +47,7 @@ index 650cd03..07fef80 100755
      
      # Start program #############################################
 diff --git a/data/packages.xml b/data/packages.xml
-index 12aac5c..7aa1a03 100644
+index 12aac5c..ff1c479 100644
 --- a/data/packages.xml
 +++ b/data/packages.xml
 @@ -1,11 +1,9 @@
@@ -156,7 +156,7 @@ index 12aac5c..7aa1a03 100644
                  <pkgname>openbox-menu</pkgname>
                  <pkgname>compton</pkgname>
                  <pkgname>xorg-xinit</pkgname>
-@@ -192,11 +177,184 @@
+@@ -192,11 +177,152 @@
                  <pkgname>slimlock</pkgname>
          </openbox_desktop>
  
@@ -256,38 +256,6 @@ index 12aac5c..7aa1a03 100644
 +		<pkgname>ubuntu-wallpapers</pkgname>
 +		<pkgname>unity-tweak-tool</pkgname>
 +		<pkgname>unity-webapps</pkgname>
-+		<pkgname>unity-webapps-amazoncloudreader</pkgname>
-+		<pkgname>unity-webapps-angrybirds</pkgname>
-+		<pkgname>unity-webapps-bbcnews</pkgname>
-+		<pkgname>unity-webapps-cuttherope</pkgname>
-+		<pkgname>unity-webapps-facebookapps</pkgname>
-+		<pkgname>unity-webapps-facebookmessenger</pkgname>
-+		<pkgname>unity-webapps-gmail</pkgname>
-+		<pkgname>unity-webapps-googlecalendar</pkgname>
-+		<pkgname>unity-webapps-googledocs</pkgname>
-+		<pkgname>unity-webapps-googleplus</pkgname>
-+		<pkgname>unity-webapps-googleplusgames</pkgname>
-+		<pkgname>unity-webapps-grooveshark</pkgname>
-+		<pkgname>unity-webapps-hulu-player</pkgname>
-+		<pkgname>unity-webapps-lastfm-radio</pkgname>
-+		<pkgname>unity-webapps-launchpad</pkgname>
-+		<pkgname>unity-webapps-librefm</pkgname>
-+		<pkgname>unity-webapps-linkedin</pkgname>
-+		<pkgname>unity-webapps-livemail</pkgname>
-+		<pkgname>unity-webapps-mail-ru</pkgname>
-+		<pkgname>unity-webapps-newsblur</pkgname>
-+		<pkgname>unity-webapps-pandora-com</pkgname>
-+		<pkgname>unity-webapps-qq-mail</pkgname>
-+		<pkgname>unity-webapps-reddit</pkgname>
-+		<pkgname>unity-webapps-tumblr</pkgname>
-+		<pkgname>unity-webapps-twitter</pkgname>
-+		<pkgname>unity-webapps-vkcom</pkgname>
-+		<pkgname>unity-webapps-wordpress-com</pkgname>
-+		<pkgname>unity-webapps-yahoomail</pkgname>
-+		<pkgname>unity-webapps-yahoonews</pkgname>
-+		<pkgname>unity-webapps-yandex-music</pkgname>
-+		<pkgname>unity-webapps-yandexnews</pkgname>
-+		<pkgname>unity-webapps-youtube</pkgname>
 +		<pkgname>webaccounts-browser-extension</pkgname>
 +		<pkgname>webapps-applications</pkgname>
 +		<!-- <pkgname>xfce4-indicator-plugin</pkgname> -->
@@ -917,5 +885,5 @@ index 5d2db27..da35a0d 100644
                  <property name="can_focus">False</property>
                  <property name="orientation">vertical</property>
 -- 
-1.8.3
+1.8.3.1
 
