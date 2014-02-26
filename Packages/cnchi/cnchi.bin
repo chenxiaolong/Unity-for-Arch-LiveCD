@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# I have no idea why pkexec won't run without a delay (even with
-# polkit-gnome-authentication-agent-1 already started)
-if [ "x${1}" = "x--autostart" ]; then
-  sleep 3
-fi
-
-pkexec /usr/sbin/cnchi.real ${*}
